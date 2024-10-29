@@ -1,0 +1,17 @@
+.book-cover {
+    width: 340px;
+    height: auto;
+    margin-right: 20px;
+}
+
+.book-info h4,
+.book-info p {
+    margin: 0;
+}
+
+.synopsis, .comments {
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    margin-top: 15px;
+}

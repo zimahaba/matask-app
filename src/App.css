@@ -1,38 +1,48 @@
-.App {
-  text-align: center;
+
+.navbar {
+    background-color: #007bff;
+    padding: 0;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.navbar-nav {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.navbar-nav .nav-link {
+    color: #ffffff;
+    padding: 10px 15px;
+    transition: background-color 0.3s;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    background-color: #ffc107;
+    color: #ffffff;
 }
 
-.App-link {
-  color: #61dafb;
+.sign-in-btn {
+    color: #007bff;
+    background-color: #ffffff;
+    border-color: #ffffff;
+    padding: 5px 15px;
+    text-transform: uppercase;
+    transition: background-color 0.3s;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.sign-in-btn:hover {
+    background-color: #ffc107;
+    color: #ffffff;
+}
+
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding-top: 20px; /* Add space for the navbar */
 }
