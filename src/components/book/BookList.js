@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './Book.css';
+import { Link } from 'react-router-dom';
 
-const Book = () => {
+const BookList = () => {
     const [books, setBooks] = useState([]);
     const [loading, setLoading] = useState(true);
   
     useEffect(() => {
-      // Fetch book list from backend server
-      axios.get('https://api.example.com/books') // Replace with your actual backend URL
+      axios.get('/books')
         .then(response => {
           setBooks(response.data);
           setLoading(false);
@@ -22,6 +22,7 @@ const Book = () => {
     return (
       <div className="container mt-4">
         <h2>Book List</h2>
+        <Link className="btn btn-success mb-3" to="/add-book">New Book</Link>
         {loading ? (
           <p>Loading...</p>
         ) : (
@@ -65,4 +66,4 @@ const Book = () => {
     );
 }
 
-export default Book;
+export default BookList;

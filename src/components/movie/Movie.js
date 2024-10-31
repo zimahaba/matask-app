@@ -1,5 +1,5 @@
 import React from 'react';
-import './Book.css';
+import './Movie.css';
 
 const Movie = () => {
   return (

@@ -2,12 +2,13 @@ import './App.css';
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Home from './components/Home';
-import Project from './components/Project';
-import Book from './components/Book';
-import Movie from './components/Movie';
-import BookInfo from './components/BookInfo';
+import Project from './components/project/Project';
+import BookList from './components/book/BookList';
+import Movie from './components/movie/Movie';
+import BookInfo from './components/book/BookInfo';
 import Login from './components/Login';
 import { useAuth } from './components/AuthContext';
+import Signup from './components/Signup';
 
 function App() {
     const { isAuthenticated, logout } = useAuth();
@@ -36,8 +37,8 @@ function App() {
                         <Routes>
                             <Route path="/" element={<Home />} />
                             <Route path="/projects" element={<Project />} />
-                            <Route path="/books" element={<Book />} />
-                            <Route path="/books/:bookId" element={<BookInfo />} />
+                            <Route path="/books" element={<BookList />} />
+                            <Route path="/books/:id" element={<BookInfo />} />
                             <Route path="/movies" element={<Movie />} />
                         </Routes>
                     </div>
@@ -46,6 +47,7 @@ function App() {
             {!isAuthenticated &&
                 <Routes>
                     <Route path="/login" element={<Login />} />
+                    <Route path="/signup" element={<Signup />} />
                 </Routes>
             }
         </>

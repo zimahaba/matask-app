@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import Cookies from 'js-cookie'
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -9,18 +8,34 @@ export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation()
 
     useEffect(() => {
-        axios.get('/auth/status')
-        .then(response => {
-            setUser({username: response.data.username});
-            setIsAuthenticated(true);
-        })
-        .catch(error => {
-            navigate('/login')
-        })
-            
+        if (location.pathname !== '/signup') {
+            checkAuth()
+            .then(authenticated => {
+                if (location.pathname === '/login' && authenticated) {
+                    navigate('/')
+                } else if (!authenticated) {
+                    navigate('/login')
+                }
+            });
+        }
     }, [])
+
+    const checkAuth = async () => {
+        try {
+            const response = await axios.get('/auth/status');
+            if (response.status === 200) {
+                setUser({username: response.data.username});
+                setIsAuthenticated(true);
+                return true;
+            }
+            return false
+        } catch(e) {
+            return false;
+        }
+    }
 
     const login = (username, password) => {
         axios.post('/login', {username: username, password: password}) 
