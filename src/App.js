@@ -9,6 +9,7 @@ import BookInfo from './components/book/BookInfo';
 import Login from './components/Login';
 import { useAuth } from './components/AuthContext';
 import Signup from './components/Signup';
+import Book from './components/book/Book';
 
 function App() {
     const { isAuthenticated, logout } = useAuth();
@@ -38,6 +39,7 @@ function App() {
                             <Route path="/" element={<Home />} />
                             <Route path="/projects" element={<Project />} />
                             <Route path="/books" element={<BookList />} />
+                            <Route path="/books/add" element={<Book />} />
                             <Route path="/books/:id" element={<BookInfo />} />
                             <Route path="/movies" element={<Movie />} />
                         </Routes>

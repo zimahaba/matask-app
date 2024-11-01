@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate()
   
     useEffect(() => {
-        axios.get('http://localhost:8080/tasks', {
-            headers: {
-                'Authorization': 'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhdWxvQHRvcnJlcy5jb20iLCJleHAiOjE3MzAxMzUxNjd9.qoh_U3hImuPr1CWHdUfQr0iZG-xznzwOTUUh8t0wQNS8fH8HYYunTD9-5pZfBRmk6whal1HcdLvzUNmjrVXRzw'
-            }})
+        axios.get('/tasks')
             .then(response => {
                 console.log(response.data.Tasks)
                 setTasks(response.data.Tasks);
@@ -20,6 +19,12 @@ const Home = () => {
                 setLoading(false);
             });
     }, []);
+
+    const handleRowClick = (task) => {
+        if (task.type === 'book') {
+            navigate(`/books/${task.childId}`);
+        }
+      };
   
     return (
       <div className="container mt-4">
@@ -40,7 +45,7 @@ const Home = () => {
             <tbody>
               {tasks.length > 0 ? (
                 tasks.map((task, index) => (
-                  <tr key={index}>
+                  <tr key={index} onClick={() => handleRowClick(task)} style={{ cursor: 'pointer' }}>
                     <td>{task.name}</td>
                     <td>{task.type}</td>
                     <td>{task.started}</td>

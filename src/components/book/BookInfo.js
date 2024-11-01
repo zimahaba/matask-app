@@ -12,11 +12,12 @@ const BookInfo = () => {
         axios.get('/books/cover/' + id, {responseType: 'blob'})
         .then(async response => {
             setCover(URL.createObjectURL(response.data));
+            
         })
         .catch(e => {
+            setCover("");
             console.log('Error getting book cover:', e)
         })
-
         axios.get('/books/' + id)
         .then(response => {
             console.log(response.data)
@@ -26,11 +27,12 @@ const BookInfo = () => {
         .catch(e => {
             console.log('Error finding book with is ' + id)
         })
+
     }, [])
 
     return (
         <>
-            {book !== null && 
+            {book !== null && cover !== null && 
             <>
                 <div className="d-flex align-items-start mb-4">
                     {/* <img src="http://localhost:8080/books/cover" alt="Book Cover" className="book-cover"/> */}
