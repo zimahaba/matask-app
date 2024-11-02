@@ -44,5 +44,6 @@
 .container {
     max-width: 1280px;
     margin: 0 auto;
-    padding-top: 20px; /* Add space for the navbar */
+    padding-top: 20px;
+    padding-bottom: 40px;
 }
