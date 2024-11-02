@@ -12,38 +12,36 @@ const BookList = () => {
         name: '',
         author: '',
         progress1: '-1',
-        progress2: '-1',
+        progress2: '-1'
+      });
+    const [pagination, setPagination] = useState({
         page: '1',
         size: '10',
         sortField: 'id',
-        sortDirection: 'ASC'
-      });
-    const [page, setPage] = useState(null)
+        sortDirection: 'DESC'
+    })
+    const [pageResult, setPageResult] = useState(null)
     const debouncedSearchTerm =  useDebouncedValue(filters, 500);
     
     useEffect(() => {
-        findBooks()
-    }, [debouncedSearchTerm])
-    
-    useEffect(() => {
-        findBooks()
-    }, []);
-  
-    const findBooks = () => {
+        findBooks(debouncedSearchTerm, pagination)
+    }, [debouncedSearchTerm, pagination])
+
+    const findBooks = (f, p) => {
         axios.get('/books', {params: {
-            name: filters.name, 
-            author: filters.author, 
-            progress1: filters.progress1, 
-            progress2: filters.progress2,
-            page: 1,
-            size: 10,
-            sortField: filters.sortField,
-            sortDirection: filters.sortDirection
+            name: f.name, 
+            author: f.author, 
+            progress1: f.progress1, 
+            progress2: f.progress2,
+            page: p.page,
+            size: p.size,
+            sortField: p.sortField,
+            sortDirection: p.sortDirection
         }})
         .then(response => {
             console.log(response.data)
             setBooks(response.data.books);
-            setPage({size: response.data.size, currentPage: response.data.page, totalPages: response.data.totalPages, totalElements: response.data.totalElements})
+            setPageResult({size: response.data.size, currentPage: response.data.page, totalPages: response.data.totalPages, totalElements: response.data.totalElements})
             setLoading(false);
         })
         .catch(error => {
@@ -54,8 +52,6 @@ const BookList = () => {
 
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
-        console.log('name:', name)
-        console.log('value:', value)
         if (name === 'progress') {
             const progress = value.split('-');
             setFilters({ ...filters, 'progress1': progress[0], 'progress2': progress[1]});
@@ -63,6 +59,16 @@ const BookList = () => {
             setFilters({ ...filters, [name]: value });
         }
     };
+
+    const handlePaginationChange = (name, value) => {
+        const property = [name][0]
+        console.log(property)
+        if (property === 'page') {
+            setPagination({ ...pagination, page: value });
+        } else if (property === 'size') {
+            setPagination({ ...pagination, page: 1, size: value });
+        }
+    }
 
     return (
       <div className="container mt-4">
@@ -81,7 +87,7 @@ const BookList = () => {
                 <div>
                     <label className="form-label">Progress</label>
                     <select className="form-select" name="progress" value={filters.progress} onChange={handleFilterChange}>
-                        <option value="">Select Progress</option>
+                        <option value="">All</option>
                         <option value="0-20">0 - 20%</option>
                         <option value="20-40">20 - 40%</option>
                         <option value="40-60">40 - 60%</option>
@@ -99,12 +105,12 @@ const BookList = () => {
             <>
                 <table className="table table-striped table-hover mt-3">
                     <thead className="table-dark">
-                    <tr>
-                        <th>Name</th>
-                        <th>Author</th>
-                        <th>Progress</th>
-                        <th>Actions</th>
-                    </tr>
+                        <tr>
+                            <th>Name</th>
+                            <th>Author</th>
+                            <th>Progress</th>
+                            <th>Actions</th>
+                        </tr>
                     </thead>
                     <tbody>
                     {books.length > 0 ? (
@@ -114,19 +120,19 @@ const BookList = () => {
                             <td>{book.author}</td>
                             <td>{book.progress}</td>
                             <td>
-                            <button className="btn btn-primary btn-sm me-2">Update</button>
-                            <button className="btn btn-danger btn-sm">Delete</button>
+                                <button className="btn btn-primary btn-sm me-2">Update</button>
+                                <button className="btn btn-danger btn-sm">Delete</button>
                             </td>
                         </tr>
                         ))
                     ) : (
                         <tr>
-                        <td colSpan="7" className="text-center">No results found</td>
+                            <td colSpan="7" className="text-center">No results found</td>
                         </tr>
                     )}
                     </tbody>
                 </table>
-                <Pagination page={page}/>
+                <Pagination pageResult={pageResult} onChange={handlePaginationChange}/>
             </>
         )}
       </div>

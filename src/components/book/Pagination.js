@@ -1,25 +1,20 @@
 import { useEffect, useState } from "react";
 
-
-const Pagination = props => {
-    const [totalPages, setTotalPages] = useState(parseInt(props.page.totalPages))
-    const [currentPage, setCurrentPage] = useState(parseInt(props.page.currentPage))
+const Pagination = ({ pageResult, onChange }) => {
     const [pageNumbers, setPageNumbers] = useState([])
-    const [size, setSize] = useState(parseInt(props.page.size))
+    const { totalPages, currentPage, size, totalElements } = pageResult;
     const [firstItem, setFirstItem] = useState()
     const [lastItem, setLastItem] = useState()
     
-    /*useEffect(() => {
-        updatePagination(totalPages, currentPage)
-        setFirstItem((size * currentPage) - (size -1 ))
-        setLastItem(size * currentPage)
-    }, [currentPage])*/
-
     useEffect(() => {
         updatePagination(totalPages, currentPage)
         setFirstItem((size * currentPage) - (size -1 ))
-        setLastItem(size * currentPage)
-    }, [])
+        if (currentPage === totalPages) {
+            setLastItem(totalElements)
+        } else {
+            setLastItem(size * currentPage)
+        }
+    }, [pageResult])
 
     const updatePagination = (totalPagesInt, currentPageInt) => {
         let pageNumbersTemp = [];
@@ -55,32 +50,42 @@ const Pagination = props => {
         setPageNumbers(pageNumbersTemp)
     }
 
+    const handlePaginationChange = (page) => {
+        if (page > 0 && page <= totalPages) {
+            onChange('page', page)
+        }
+    }
+
+    const handleSizeChange = (e) => {
+        onChange('size', e.target.value)
+    }
+
     return (
         <div className="d-flex justify-content-between align-items-center my-3">
             <div>
-                <span>Showing {firstItem} to {lastItem} of <b>{props.page.totalElements}</b> books.</span>
+                <span>Showing {firstItem} to {lastItem} of <b>{pageResult.totalElements}</b> books.</span>
             </div>
 
             <div className="d-flex justify-content-center">
-                <button className="btn btn-outline-primary me-2" onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
+                <button className="btn btn-outline-primary me-2" onClick={() => handlePaginationChange(currentPage - 1)} disabled={currentPage === 1}>
                     Previous
                 </button>
                 {pageNumbers.map((page, index) => page === '...' ? 
                     (<span key={index} className="mx-2">...</span>) : 
                     (
-                        <button key={index} className={`btn btn-outline-primary ${page === currentPage ? 'active' : ''}`} onClick={() => setCurrentPage(page)}>
+                        <button key={index} className={`btn btn-outline-primary ${page === currentPage ? 'active' : ''}`} onClick={() => handlePaginationChange(page)}>
                             {page}
                         </button>
                     )
                 )}
-                <button className="btn btn-outline-primary ms-2" onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages}>
+                <button className="btn btn-outline-primary ms-2" onClick={() => handlePaginationChange(currentPage + 1)} disabled={currentPage === totalPages}>
                     Next
                 </button>
             </div>
 
             <div className="d-flex align-items-center">
                 <span className="me-2" style={{ whiteSpace: 'nowrap' }}>Rows per page:</span>
-                <select className="form-select">
+                <select className="form-select" onChange={handleSizeChange}>
                     <option value={10}>10</option>
                     <option value={20}>20</option>
                     <option value={50}>50</option>
