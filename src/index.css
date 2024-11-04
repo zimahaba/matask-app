@@ -12,3 +12,86 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+thead {
+    color: #ffffff;;
+    background-color: #183758;
+}
+
+.primary-button-outline {
+    color: #183758;
+    background-color: #ffffff;
+    border: 1px solid;
+    border-color: #183758;
+}
+
+.primary-button-outline:hover {
+    color: #ffffff;
+    background-color: #183758;
+    border: 1px solid;
+    border-color: #183758;
+}
+
+.primary-button-outline:focus {
+    box-shadow: 0 0 0 .25rem rgba(24,55,88, .5);
+}
+
+.primary-button-outline.active {
+    color: #ffffff;
+    background-color: #183758;
+    border-color: #183758;
+}
+
+.btn-1 {
+    color: #ffffff;
+    background-color: #183758;
+    border: 1px solid;
+    border-color: #183758;
+}
+
+.btn-1:hover {
+    color: #ffffff;
+    background-color: #215083;
+    border: 1px solid;
+    border-color: #215083;
+}
+
+.btn-1:focus {
+    box-shadow: 0 0 0 .25rem rgba(24,55,88, .5);
+}
+
+.btn-2 {
+    color: #ffffff;
+    background-color: #9e9e9e;
+    border: 1px solid;
+    border-color: #9e9e9e;
+}
+
+.btn-2:hover {
+    color: #ffffff;
+    background-color: #868686;
+    border: 1px solid;
+    border-color: #868686;
+}
+
+.btn-2:focus {
+    box-shadow: 0 0 0 .25rem rgba(24,55,88, .5);
+}
+
+.bg-1 {
+    background-color: #183758;
+}
+
+.select-1:focus {
+    box-shadow: 0 0 0 .25rem rgba(24,55,88, .5);
+    border: 1px solid rgba(24,55,88, .5);
+}
+
+:root {
+    --bg-tr-hover: rgba(0, 0, 0, 0.15)
+}
+
+.table-hover>tbody>tr:hover {
+    --bs-table-accent-bg: var(--bg-tr-hover);
+    color: var(--bs-table-hover-color);
+}

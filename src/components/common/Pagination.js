@@ -63,29 +63,29 @@ const Pagination = ({ pageResult, onChange }) => {
     return (
         <div className="d-flex justify-content-between align-items-center my-3">
             <div>
-                <span>Showing {firstItem} to {lastItem} of <b>{pageResult.totalElements}</b> books.</span>
+                <span style={{color: '#183758'}}>Showing {firstItem} to {lastItem} of <b>{pageResult.totalElements}</b> books.</span>
             </div>
 
             <div className="d-flex justify-content-center">
-                <button className="btn btn-outline-primary me-2" onClick={() => handlePaginationChange(currentPage - 1)} disabled={currentPage === 1}>
+                <button className="btn primary-button-outline me-2" onClick={() => handlePaginationChange(currentPage - 1)} disabled={currentPage === 1}>
                     Previous
                 </button>
                 {pageNumbers.map((page, index) => page === '...' ? 
                     (<span key={index} className="mx-2">...</span>) : 
                     (
-                        <button key={index} className={`btn btn-outline-primary ${page === currentPage ? 'active' : ''}`} onClick={() => handlePaginationChange(page)}>
+                        <button key={index} className={`btn mx-1 primary-button-outline ${page === currentPage ? 'active' : ''}`} onClick={() => handlePaginationChange(page)}>
                             {page}
                         </button>
                     )
                 )}
-                <button className="btn btn-outline-primary ms-2" onClick={() => handlePaginationChange(currentPage + 1)} disabled={currentPage === totalPages}>
+                <button className="btn primary-button-outline ms-2" onClick={() => handlePaginationChange(currentPage + 1)} disabled={currentPage === totalPages}>
                     Next
                 </button>
             </div>
 
             <div className="d-flex align-items-center">
-                <span className="me-2" style={{ whiteSpace: 'nowrap' }}>Rows per page:</span>
-                <select className="form-select" onChange={handleSizeChange}>
+                <span className="me-2" style={{ whiteSpace: 'nowrap', color: '#183758' }}>Rows per page:</span>
+                <select className="form-select select-1" onChange={handleSizeChange}>
                     <option value={10}>10</option>
                     <option value={20}>20</option>
                     <option value={50}>50</option>

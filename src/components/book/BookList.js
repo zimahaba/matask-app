@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './Book.css';
 import { Link, useNavigate } from 'react-router-dom';
-import Pagination from './Pagination';
+import Pagination from '../common/Pagination';
 import { useDebouncedValue } from '../debounce';
 
 const BookList = () => {
@@ -29,6 +29,7 @@ const BookList = () => {
     }, [debouncedSearchTerm, pagination])
 
     const findBooks = (f, p) => {
+        console.log('pagination:', p)
         axios.get('/books', {params: {
             name: f.name, 
             author: f.author, 
@@ -89,6 +90,34 @@ const BookList = () => {
         navigate('/books/' + id);
     };
 
+    const handleSort = (field) => {
+        const { sortField, sortDirection } = pagination;
+
+        let newSortDirection = 'ASC';
+        if (sortField === field) {
+            if (sortDirection === 'ASC') {
+                newSortDirection = 'DESC';
+            } else if (sortDirection === 'DESC') {
+                newSortDirection = ''; // Clear sorting
+            }
+        }
+
+        setPagination({
+            ...pagination,
+            page: '1', // Reset to the first page whenever sorting changes
+            sortField: newSortDirection ? field : '', // Set to '' if no sorting
+            sortDirection: newSortDirection
+        });
+    };
+
+    const renderSortIcon = (field) => {
+        const { sortField, sortDirection } = pagination;
+        if (sortField === field) {
+            return sortDirection === 'ASC' ? '▲' : sortDirection === 'DESC' ? '▼' : '';
+        }
+        return '';
+    };
+
     return (
       <div className="container mt-4">
         <h2>Book List</h2>
@@ -115,7 +144,7 @@ const BookList = () => {
                     </select>
                 </div>
             </div>
-            <Link className="btn btn-success mb-3" to="/books/add">New Book</Link>
+            <Link className="btn btn-1 mb-3" to="/books/add">New Book</Link>
         </div>
 
         {loading ? (
@@ -123,11 +152,17 @@ const BookList = () => {
         ) : (
             <>
                 <table className="table table-striped table-hover mt-3">
-                    <thead className="table-dark">
+                    <thead>
                         <tr>
-                            <th style={{ width: '40%' }}>Name</th>
-                            <th style={{ width: '35%' }}>Author</th>
-                            <th style={{ width: '10%' }}>Progress</th>
+                            <th style={{ width: '40%', cursor: 'pointer' }} onClick={() => handleSort('name')}>
+                                Name {renderSortIcon('name')}
+                            </th>
+                            <th style={{ width: '35%', cursor: 'pointer' }} onClick={() => handleSort('author')}>
+                                Author {renderSortIcon('author')}
+                            </th>
+                            <th style={{ width: '10%', cursor: 'pointer' }} onClick={() => handleSort('progress')}>
+                                Progress {renderSortIcon('progress')}
+                            </th>
                             <th style={{ width: '15%' }}>Actions</th>
                         </tr>
                     </thead>
@@ -139,7 +174,7 @@ const BookList = () => {
                             <td>{book.author}</td>
                             <td>{book.progress}</td>
                             <td>
-                                <button className="btn btn-primary btn-sm me-2" 
+                                <button className="btn btn-2 btn-sm me-2" 
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         handleUpdateBook(book.id);

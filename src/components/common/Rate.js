@@ -3,18 +3,26 @@ import blankStar from '../../assets/star_blank_64.png';
 import yellowStar from '../../assets/star_yellow_64.png';
 
 
-const Rate = ({initRate, onUpdate}) => {
+const Rate = ({initRate, onUpdate, readOnly}) => {
     const [rate, setRate] = useState(0);
     const [hovered, setHovered] = useState(0);
 
-    const handleMouseEnter = (index) => setHovered(index);
-    const handleMouseLeave = () => setHovered(0);
+    const handleMouseEnter = (index) => {
+        if (readOnly) return;
+        setHovered(index);
+    }
+
+    const handleMouseLeave = () => {
+        if (readOnly) return;
+        setHovered(0);
+    }
 
     useEffect(() => {
         setRate(initRate);
     }, [initRate]);
 
     const handleClick = (value) => {
+        if (readOnly) return;
         setRate(value)
         onUpdate(value)
     }

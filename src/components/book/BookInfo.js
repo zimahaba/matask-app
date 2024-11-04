@@ -13,6 +13,7 @@ const BookInfo = () => {
     useEffect(() => {
         axios.get('/books/cover/' + id, {responseType: 'blob'})
         .then(async response => {
+            console.log('got picture')
             setCover(URL.createObjectURL(response.data));
             
         })
@@ -36,14 +37,13 @@ const BookInfo = () => {
             {book !== null &&
                 <div className="container mt-5" style={{ maxWidth: '800px' }}>
                     <div className="card shadow-lg">
-                        <div className="card-header text-center text-white" style={{backgroundColor: '#183758'}}>
+                        <div className="card-header text-center bg-1 text-white">
                             <h2>Book Details</h2>
                         </div>
                         <div className="card-body">
                             <div className="d-flex flex-column flex-md-row">
                                 <div className="text-center me-md-4 mb-3 mb-md-0">
-                                    
-                                    {book.cover ? (
+                                    {cover ? (
                                         <img src={cover} alt="Book Cover" style={{ width: '260px', height: '360px', borderRadius: '5px', objectFit: 'cover' }} />
                                     ) : (
                                         <div style={{
@@ -57,28 +57,45 @@ const BookInfo = () => {
                                 </div>
 
                                 <div className="flex-grow-1">
-                                    <h5>Name:</h5>
-                                    <p>{book.name}</p>
-                                    <h5>Author:</h5>
-                                    <p>{book.author}</p>
-                                    <h5>Year:</h5>
-                                    <p>{book.year}</p>
-                                    <h5>Genre:</h5>
-                                    <p>{book.genre}</p>
-                                    <h5>Started:</h5>
-                                    <p>{book.started}</p>
-                                    <h5>Finished:</h5>
-                                    <p>{book.ended}</p>
+                                    <div className="mb-4">
+                                        <h5>Name:</h5>
+                                        <p>{book.name}</p>
+                                    </div>
+                                
+                                    <div className="mb-4">
+                                        <h5>Author:</h5>
+                                        <p>{book.author}</p>
+                                    </div>
+                                    <div className="row mb-4">
+                                        <div className="col-6">
+                                            <h5>Year:</h5>
+                                            <p>{book.year}</p>
+                                        </div>
+                                        <div className="col-6">
+                                            <h5>Genre:</h5>
+                                            <p>{book.genre}</p>
+                                        </div>
+                                    </div>
+                                    <div className="row mb-4">
+                                        <div className="col-6">
+                                            <h5>Started:</h5>
+                                            <p>{book.started}</p>
+                                        </div>
+                                        <div className="col-6">
+                                            <h5>Finished:</h5>
+                                            <p>{book.ended}</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-
+                        
                             <div className="row mt-3">
                                 <div className="col-md-4 mb-3 me-4">
                                     <h5>Rate:</h5>
                                     <Rate initRate={book.rate} readOnly />
                                 </div>
                                 <div className="col-md-7 mb-3 ms-1">
-                                    <h5>Progress:</h5>
+                                    <h5>Progress: {book.progress}%</h5>
                                     <Progress initProgress={book.progress} readOnly />
                                 </div>
                             </div>

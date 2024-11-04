@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-const Progress = ({initProgress, onUpdate}) => {
+const Progress = ({initProgress, onUpdate, readOnly}) => {
     const [progress, setProgress] = useState(0);
     const [isDragging, setIsDragging] = useState(false);
     const lineRef = useRef(null);
@@ -10,6 +10,7 @@ const Progress = ({initProgress, onUpdate}) => {
     }, [initProgress]);
 
     const handleMouseMove = (event) => {
+        if (readOnly) return;
         if (!isDragging) return;
 
         const rect = lineRef.current.getBoundingClientRect();
@@ -22,14 +23,17 @@ const Progress = ({initProgress, onUpdate}) => {
     };
 
     const handleMouseUp = () => {
+        if (readOnly) return;
         setIsDragging(false);
     };
 
     const handleMouseDown = () => {
+        if (readOnly) return;
         setIsDragging(true);
     };
 
     const handleTouchMove = (event) => {
+        if (readOnly) return;
         if (!isDragging) return;
         
         const rect = lineRef.current.getBoundingClientRect();
@@ -42,16 +46,18 @@ const Progress = ({initProgress, onUpdate}) => {
     };
 
     const handleTouchEnd = () => {
+        if (readOnly) return;
         setIsDragging(false);
     };
 
     const handleCircleMouseUp = () => {
+        if (readOnly) return;
         onUpdate(progress);
     };
 
     return (
         <>
-            <label className="form-label">Progress ({progress}%)</label>
+            {!readOnly && <label className="form-label">Progress ({progress}%)</label>}
             <div 
                 style={{ 
                     display: 'flex', 
@@ -101,7 +107,7 @@ const Progress = ({initProgress, onUpdate}) => {
                             transform: 'translate(-50%, -50%)',
                             width: '20px',
                             height: '20px',
-                            background: '#007bff',
+                            background: '#183758',
                             borderRadius: '50%',
                             cursor: 'pointer'
                         }}
