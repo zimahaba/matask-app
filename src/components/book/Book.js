@@ -1,72 +1,108 @@
 // AddBook.js
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import Rate from '../common/Rate';
 import Progress from '../common/Progress';
 
 function Book() {
-  const [formData, setFormData] = useState({
-    name: '',
-    author: '',
-    year: '',
-    genre: '',
-    started: '',
-    ended: '',
-    comments: '',
-    synopsis: '',
-    cover: null
-  });
-  // synopsis, comments, rate, progress
-  const [coverPreview, setCoverPreview] = useState(null);
-  const navigate = useNavigate();
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setFormData({ ...formData, cover: file });
-      setCoverPreview(URL.createObjectURL(file));
-    }
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const formDataToSend = new FormData();
-    Object.keys(formData).forEach(key => {
-      formDataToSend.append(key, formData[key]);
+    const [formData, setFormData] = useState({
+        name: '',
+        author: '',
+        year: '',
+        genre: '',
+        started: '',
+        ended: '',
+        comments: '',
+        synopsis: '',
+        rate: 0,
+        progress: 0,
+        cover: null
     });
+    const [coverPreview, setCoverPreview] = useState(null);
+    const navigate = useNavigate();
+    const {id} = useParams()
 
-    axios.post('/books', formDataToSend, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    })
-      .then(() => {
-        alert('Book added successfully');
-        navigate('/books');
-      })
-      .catch(error => console.error('There was an error adding the book!', error));
-  };
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
 
-  const handleRateUpdate = (value) => {
-    setFormData({ ...formData, rate: value });
-  }
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setFormData({ ...formData, cover: file });
+            setCoverPreview(URL.createObjectURL(file));
+        }
+    };
 
-  const handleProgressUpdate = (value) => {
-    setFormData({ ...formData, progress: value });
-  }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const formDataToSend = new FormData();
+        Object.keys(formData).forEach(key => {
+            formDataToSend.append(key, formData[key]);
+        });
+        
+        const method = id === undefined ? 'post' : 'put';
+        const url = id === undefined ? '/books' : '/books/' + id;
+        console.log('url:', url)
+
+        axios({
+            method: method,
+            url: url,
+            data: formDataToSend,
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        .then(() => {
+            alert('Book saved successfully');
+            navigate('/books');
+        })
+        .catch(error => console.error('There was an error saving the book!', error));
+    };
+
+    const handleRateUpdate = (value) => {
+        setFormData({ ...formData, rate: value });
+    }
+
+    const handleProgressUpdate = (value) => {
+        setFormData({ ...formData, progress: value });
+    }
+
+    useEffect(() => {
+        if (id !== undefined) {
+            axios.get('/books/' + id)
+            .then((response) => {
+                console.log(response.data)
+                setFormData({
+                    name: response.data.name,
+                    author: response.data.author,
+                    year: response.data.year,
+                    genre: response.data.genre,
+                    started: response.data.started,
+                    ended: response.data.ended,
+                    comments: response.data.comments,
+                    synopsis: response.data.synopsis,
+                    rate: response.data.rate,
+                    progress: response.data.progress,
+                    cover: null
+                })
+            })
+            .catch(e => {console.error('Book with id ' + id + 'not found.')})
+        }
+    }, [])
 
   return (
     <div className="container mt-5" style={{ maxWidth: '800px' }}>
         <form onSubmit={handleSubmit}>
             <div className="card shadow-lg">
                 <div className="card-header text-center bg-primary text-white">
-                    <h2>Add New Book</h2>
+                    {id === undefined 
+                        ? (<h2>New Book</h2>) 
+                        : (<h2>Edit Book</h2>)
+
+                    }
                 </div>
                 <div className="card-body">
                     <div className="d-flex flex-column flex-md-row">
@@ -93,7 +129,7 @@ function Book() {
                             </div>
                         <div className="mb-3">
                             <label className="form-label">Author</label>
-                            <input type="text" className="form-control" name="author" value={formData.author} onChange={handleChange}/>
+                            <input type="text" className="form-control" name="author" value={formData.author} onChange={handleChange} required/>
                         </div>
                         <div className="row mb-3">
                             <div className="col-6">
@@ -121,10 +157,10 @@ function Book() {
                 <div className="row mt-3">
                     <div className="col-md-4 mb-3 me-4">
                         <label className="form-label">Rate</label>
-                        <Rate onUpdate={handleRateUpdate}/>
+                        <Rate initRate={formData.rate} onUpdate={handleRateUpdate}/>
                     </div>
                     <div className="col-md-7 mb-3 ms-1">
-                        <Progress onUpdate={handleProgressUpdate}/>
+                        <Progress initProgress={formData.progress} onUpdate={handleProgressUpdate}/>
                     </div>
                 </div>
                 <div className="mb-3">
@@ -137,7 +173,8 @@ function Book() {
                 </div>
 
                 <div className="text-center">
-                    <button type="submit" className="btn btn-primary px-5">Add Book</button>
+                    <Link className="btn btn-secondary px-5 me-2" to="/books">Cancel</Link>
+                    <button type="submit" className="btn btn-primary px-5">Save</button>
                 </div>
                 </div>
             </div>

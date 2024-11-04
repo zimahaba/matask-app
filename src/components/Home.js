@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import './Home.css'
 
 const Home = () => {
     const [tasks, setTasks] = useState([]);
@@ -24,7 +25,7 @@ const Home = () => {
         if (task.type === 'book') {
             navigate(`/books/${task.childId}`);
         }
-      };
+    };
   
     return (
       <div className="container mt-4">
@@ -33,7 +34,7 @@ const Home = () => {
           <p>Loading...</p>
         ) : (
           <table className="table table-striped table-hover mt-3">
-            <thead className="table-dark">
+            <thead>
               <tr>
                 <th>Name</th>
                 <th>Type</th>

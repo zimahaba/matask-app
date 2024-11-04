@@ -22,7 +22,7 @@ function App() {
         <>
             {isAuthenticated &&
                 <div>
-                    <nav className="navbar navbar-expand-lg navbar-dark">
+                    <nav className="navbar navbar-expand-lg">
                         <div className="container-fluid">
                             <div className="navbar-nav mx-auto">
                                 <Link className="nav-link" to="/">Home</Link>
@@ -40,6 +40,7 @@ function App() {
                             <Route path="/projects" element={<Project />} />
                             <Route path="/books" element={<BookList />} />
                             <Route path="/books/add" element={<Book />} />
+                            <Route path="/books/edit/:id" element={<Book />} />
                             <Route path="/books/:id" element={<BookInfo />} />
                             <Route path="/movies" element={<Movie />} />
                         </Routes>

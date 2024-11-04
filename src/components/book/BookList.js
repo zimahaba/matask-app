@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './Book.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Pagination from './Pagination';
 import { useDebouncedValue } from '../debounce';
 
@@ -22,6 +22,7 @@ const BookList = () => {
     })
     const [pageResult, setPageResult] = useState(null)
     const debouncedSearchTerm =  useDebouncedValue(filters, 500);
+    const navigate = useNavigate()
     
     useEffect(() => {
         findBooks(debouncedSearchTerm, pagination)
@@ -62,13 +63,31 @@ const BookList = () => {
 
     const handlePaginationChange = (name, value) => {
         const property = [name][0]
-        console.log(property)
         if (property === 'page') {
             setPagination({ ...pagination, page: value });
         } else if (property === 'size') {
             setPagination({ ...pagination, page: 1, size: value });
         }
     }
+
+    const handleUpdateBook = (id) => {
+        navigate("/books/edit/" + id)
+    }
+
+    const handleDeleteBook = (id, name) => {
+        if(window.confirm('Are you sure you want to delete the book \'' + name + '\'?')) {
+            axios.delete('/books/' + id)
+            .then(response => {
+                console.log('Book deleted successfully.');
+                findBooks(debouncedSearchTerm, pagination);
+            })
+            .catch(e => console.log('Error deleting book:', e))
+        }
+    }
+
+    const handleRowClick = (id) => {
+        navigate('/books/' + id);
+    };
 
     return (
       <div className="container mt-4">
@@ -106,22 +125,34 @@ const BookList = () => {
                 <table className="table table-striped table-hover mt-3">
                     <thead className="table-dark">
                         <tr>
-                            <th>Name</th>
-                            <th>Author</th>
-                            <th>Progress</th>
-                            <th>Actions</th>
+                            <th style={{ width: '40%' }}>Name</th>
+                            <th style={{ width: '35%' }}>Author</th>
+                            <th style={{ width: '10%' }}>Progress</th>
+                            <th style={{ width: '15%' }}>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                     {books.length > 0 ? (
                         books.map((book, index) => (
-                        <tr key={index}>
+                        <tr key={index} onClick={() => handleRowClick(book.id)} style={{ cursor: 'pointer' }}>
                             <td>{book.name}</td>
                             <td>{book.author}</td>
                             <td>{book.progress}</td>
                             <td>
-                                <button className="btn btn-primary btn-sm me-2">Update</button>
-                                <button className="btn btn-danger btn-sm">Delete</button>
+                                <button className="btn btn-primary btn-sm me-2" 
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleUpdateBook(book.id);
+                                    }}>
+                                    Update
+                                </button>
+                                <button className="btn btn-danger btn-sm" 
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleDeleteBook(book.id, book.name);
+                                    }}>
+                                    Delete
+                                </button>
                             </td>
                         </tr>
                         ))
@@ -132,7 +163,9 @@ const BookList = () => {
                     )}
                     </tbody>
                 </table>
-                <Pagination pageResult={pageResult} onChange={handlePaginationChange}/>
+                {pageResult.totalElements > 0 &&
+                    <Pagination pageResult={pageResult} onChange={handlePaginationChange}/>
+                }
             </>
         )}
       </div>

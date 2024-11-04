@@ -1,9 +1,13 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
-const Progress = ({onUpdate}) => {
+const Progress = ({initProgress, onUpdate}) => {
     const [progress, setProgress] = useState(0);
     const [isDragging, setIsDragging] = useState(false);
     const lineRef = useRef(null);
+
+    useEffect(() => {
+        setProgress(initProgress);
+    }, [initProgress]);
 
     const handleMouseMove = (event) => {
         if (!isDragging) return;
