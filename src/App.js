@@ -44,6 +44,7 @@ function App() {
                             <Route path="/books/edit/:id" element={<Book />} />
                             <Route path="/books/:id" element={<BookInfo />} />
                             <Route path="/movies" element={<MovieList />} />
+                            <Route path="/movies/add" element={<Movie />} />
                         </Routes>
                     </div>
                 </div>

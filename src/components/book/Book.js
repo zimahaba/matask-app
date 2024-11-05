@@ -1,4 +1,3 @@
-// AddBook.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -8,7 +7,7 @@ import Progress from '../common/Progress';
 function Book() {
     const [formData, setFormData] = useState({
         name: '',
-        author: '',
+        //author: '',
         year: '',
         genre: '',
         started: '',
@@ -42,10 +41,9 @@ function Book() {
         Object.keys(formData).forEach(key => {
             formDataToSend.append(key, formData[key]);
         });
-        
+        formDataToSend.forEach((v, k) => console.log(k, ':', v))
         const method = id === undefined ? 'post' : 'put';
         const url = id === undefined ? '/books' : '/books/' + id;
-        console.log('url:', url)
 
         axios({
             method: method,
@@ -156,8 +154,8 @@ function Book() {
                                     <input type="date" className="form-control" name="started" value={formData.started} onChange={handleChange}/>
                                 </div>
                                 <div className="col-6">
-                                <label className="form-label">Finished</label>
-                                <input type="date" className="form-control" name="ended" value={formData.ended} onChange={handleChange}/>
+                                    <label className="form-label">Finished</label>
+                                    <input type="date" className="form-control" name="ended" value={formData.ended} onChange={handleChange}/>
                                 </div>
                             </div>
                         </div>
