@@ -78,6 +78,10 @@ thead {
     box-shadow: 0 0 0 .25rem rgba(24,55,88, .5);
 }
 
+.c-1 {
+    color: #183758;
+}
+
 .bg-1 {
     background-color: #183758;
 }
