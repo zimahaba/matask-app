@@ -10,6 +10,7 @@ import Login from './components/Login';
 import { useAuth } from './components/AuthContext';
 import Signup from './components/Signup';
 import Book from './components/book/Book';
+import MovieList from './components/movie/MovieList';
 
 function App() {
     const { isAuthenticated, logout } = useAuth();
@@ -42,7 +43,7 @@ function App() {
                             <Route path="/books/add" element={<Book />} />
                             <Route path="/books/edit/:id" element={<Book />} />
                             <Route path="/books/:id" element={<BookInfo />} />
-                            <Route path="/movies" element={<Movie />} />
+                            <Route path="/movies" element={<MovieList />} />
                         </Routes>
                     </div>
                 </div>

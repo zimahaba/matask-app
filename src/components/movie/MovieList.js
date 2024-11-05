@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './Book.css';
+import './Movie.css';
 import { Link, useNavigate } from 'react-router-dom';
 import Pagination from '../common/Pagination';
 import { useDebouncedValue } from '../debounce';
 
-const BookList = () => {
-    const [books, setBooks] = useState([]);
+const MovieList = () => {
+    const [movies, setMovies] = useState([]);
     const [loading, setLoading] = useState(true);
     const [filters, setFilters] = useState({
         name: '',
-        author: '',
-        progress1: '-1',
-        progress2: '-1'
+        director: '',
+        year: '',
       });
     const [pagination, setPagination] = useState({
         page: '1',
@@ -25,16 +24,15 @@ const BookList = () => {
     const navigate = useNavigate()
     
     useEffect(() => {
-        findBooks(debouncedSearchTerm, pagination)
+        findMovies(debouncedSearchTerm, pagination)
     }, [debouncedSearchTerm, pagination])
 
-    const findBooks = (f, p) => {
+    const findMovies = (f, p) => {
         console.log('pagination:', p)
-        axios.get('/books', {params: {
+        axios.get('/movies', {params: {
             name: f.name, 
-            author: f.author, 
-            progress1: f.progress1, 
-            progress2: f.progress2,
+            director: f.director, 
+            year: f.year,
             page: p.page,
             size: p.size,
             sortField: p.sortField,
@@ -42,24 +40,19 @@ const BookList = () => {
         }})
         .then(response => {
             console.log(response.data)
-            setBooks(response.data.books);
+            setMovies(response.data.movies);
             setPageResult({size: response.data.size, currentPage: response.data.page, totalPages: response.data.totalPages, totalElements: response.data.totalElements})
             setLoading(false);
         })
         .catch(error => {
-            console.error("There was an error fetching the books!", error);
+            console.error("There was an error fetching the movies!", error);
             setLoading(false);
         });
     }
 
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
-        if (name === 'progress') {
-            const progress = value.split('-');
-            setFilters({ ...filters, 'progress1': progress[0], 'progress2': progress[1]});
-        } else {
-            setFilters({ ...filters, [name]: value });
-        }
+        setFilters({ ...filters, [name]: value });
     };
 
     const handlePaginationChange = (name, value) => {
@@ -71,23 +64,23 @@ const BookList = () => {
         }
     }
 
-    const handleUpdateBook = (id) => {
-        navigate("/books/edit/" + id)
+    const handleUpdateMovie = (id) => {
+        navigate("/movies/edit/" + id)
     }
 
-    const handleDeleteBook = (id, name) => {
-        if(window.confirm('Are you sure you want to delete the book \'' + name + '\'?')) {
-            axios.delete('/books/' + id)
+    const handleDeleteMovie = (id, name) => {
+        if(window.confirm('Are you sure you want to delete the movie \'' + name + '\'?')) {
+            axios.delete('/movies/' + id)
             .then(response => {
-                console.log('Book deleted successfully.');
-                findBooks(debouncedSearchTerm, pagination);
+                console.log('Movie deleted successfully.');
+                findMovies(debouncedSearchTerm, pagination);
             })
-            .catch(e => console.log('Error deleting book:', e))
+            .catch(e => console.log('Error deleting movie:', e))
         }
     }
 
     const handleRowClick = (id) => {
-        navigate('/books/' + id);
+        navigate('/movies/' + id);
     };
 
     const handleSort = (field) => {
@@ -120,7 +113,7 @@ const BookList = () => {
 
     return (
       <div className="container mt-4">
-        <h2>Book List</h2>
+        <h2>Movie List</h2>
 
         <div className="d-flex justify-content-between align-items-end mb-3">
             <div className="d-flex gap-3">
@@ -129,22 +122,15 @@ const BookList = () => {
                     <input type="text" className="form-control" name="name" onChange={handleFilterChange}/>
                 </div>
                 <div>
-                    <label className="form-label">Author</label>
-                    <input type="text" className="form-control" name="author" onChange={handleFilterChange}/>
+                    <label className="form-label">Director</label>
+                    <input type="text" className="form-control" name="director" onChange={handleFilterChange}/>
                 </div>
                 <div>
-                    <label className="form-label">Progress</label>
-                    <select className="form-select" name="progress" onChange={handleFilterChange}>
-                        <option value="">All</option>
-                        <option value="0-20">0 - 20%</option>
-                        <option value="20-40">20 - 40%</option>
-                        <option value="40-60">40 - 60%</option>
-                        <option value="60-80">60 - 80%</option>
-                        <option value="80-100">80 - 100%</option>
-                    </select>
+                    <label className="form-label">Year</label>
+                    <input type="text" className="form-control" name="year" onChange={handleFilterChange}/>
                 </div>
             </div>
-            <Link className="btn btn-1 mb-3" to="/books/add">New Book</Link>
+            <Link className="btn btn-1 mb-3" to="/movies/add">New Movie</Link>
         </div>
 
         {loading ? (
@@ -154,37 +140,41 @@ const BookList = () => {
                 <table className="table table-striped table-hover mt-3">
                     <thead>
                         <tr>
-                            <th style={{ width: '40%', cursor: 'pointer' }} onClick={() => handleSort('name')}>
+                            <th style={{ width: '30%', cursor: 'pointer' }} onClick={() => handleSort('name')}>
                                 Name {renderSortIcon('name')}
                             </th>
-                            <th style={{ width: '35%', cursor: 'pointer' }} onClick={() => handleSort('author')}>
-                                Author {renderSortIcon('author')}
+                            <th style={{ width: '15%', cursor: 'pointer' }} onClick={() => handleSort('director')}>
+                                Director {renderSortIcon('director')}
                             </th>
-                            <th style={{ width: '10%', cursor: 'pointer' }} onClick={() => handleSort('progress')}>
-                                Progress {renderSortIcon('progress')}
+                            <th style={{ width: '35%', cursor: 'pointer' }}>
+                                Actors 
+                            </th>
+                            <th style={{ width: '5%', cursor: 'pointer' }} onClick={() => handleSort('year')}>
+                                Year {renderSortIcon('year')}
                             </th>
                             <th style={{ width: '15%' }}>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                    {books.length > 0 ? (
-                        books.map((book, index) => (
-                        <tr key={index} onClick={() => handleRowClick(book.id)} style={{ cursor: 'pointer' }}>
-                            <td>{book.name}</td>
-                            <td>{book.author}</td>
-                            <td>{book.progress}</td>
+                    {movies.length > 0 ? (
+                        movies.map((movie, index) => (
+                        <tr key={index} onClick={() => handleRowClick(movie.id)} style={{ cursor: 'pointer' }}>
+                            <td>{movie.name}</td>
+                            <td>{movie.director}</td>
+                            <td></td>
+                            <td>{movie.year}</td>
                             <td>
                                 <button className="btn btn-2 btn-sm me-2" 
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        handleUpdateBook(book.id);
+                                        handleUpdateMovie(movie.id);
                                     }}>
                                     Update
                                 </button>
                                 <button className="btn btn-danger btn-sm" 
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        handleDeleteBook(book.id, book.name);
+                                        handleDeleteMovie(movie.id, movie.name);
                                     }}>
                                     Delete
                                 </button>
@@ -207,4 +197,4 @@ const BookList = () => {
     );
 }
 
-export default BookList;
+export default MovieList;

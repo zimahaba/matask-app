@@ -25,7 +25,7 @@ export function AuthProvider({ children }) {
 
     const checkAuth = async () => {
         try {
-            const response = await axios.get('/auth/status');
+            const response = await axios.get('/auth/userinfo');
             if (response.status === 200) {
                 setUser({username: response.data.username});
                 setIsAuthenticated(true);
@@ -38,7 +38,7 @@ export function AuthProvider({ children }) {
     }
 
     const login = (username, password) => {
-        axios.post('/login', {username: username, password: password}) 
+        axios.post('/auth/login', {username: username, password: password}) 
         .then(response => {
             setUser({username: username});
             setIsAuthenticated(true);
@@ -50,7 +50,7 @@ export function AuthProvider({ children }) {
     };
 
     const logout = () => {
-        axios.post('/logout')
+        axios.post('/auth/logout')
         .then(response => {
             setUser(null);
             setIsAuthenticated(false);
