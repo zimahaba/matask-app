@@ -29,7 +29,7 @@
     border-color: #ffffff;
     padding: 5px 15px;
     text-transform: uppercase;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, border-color 0.3s;
     position: absolute;
     right: 15px;
     top: 50%;
@@ -37,7 +37,8 @@
 }
 
 .sign-in-btn:hover {
-    background-color: #ffc107;
+    background-color: #a8820f;
+    border-color: #a8820f;
     color: #ffffff;
 }
 

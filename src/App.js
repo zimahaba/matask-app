@@ -6,12 +6,13 @@ import Project from './components/project/Project';
 import BookList from './components/book/BookList';
 import Movie from './components/movie/Movie';
 import BookInfo from './components/book/BookInfo';
-import Login from './components/Login';
-import { useAuth } from './components/AuthContext';
-import Signup from './components/Signup';
+import Login from './components/auth/Login';
+import { useAuth } from './components/auth/AuthContext';
+import Signup from './components/user/Signup';
 import Book from './components/book/Book';
 import MovieList from './components/movie/MovieList';
 import MovieInfo from './components/movie/MovieInfo';
+import ProjectList from './components/project/ProjectList';
 
 function App() {
     const { isAuthenticated, logout } = useAuth();
@@ -39,7 +40,10 @@ function App() {
                     <div className="container">
                         <Routes>
                             <Route path="/" element={<Home />} />
-                            <Route path="/projects" element={<Project />} />
+                            <Route path="/projects" element={<ProjectList />} />
+                            <Route path="/projects/add" element={<Project />} />
+                            <Route path="/projects/edit/:id" element={<Project />} />
+                            <Route path="/projects/:id" element={<Project />} />
                             <Route path="/books" element={<BookList />} />
                             <Route path="/books/add" element={<Book />} />
                             <Route path="/books/edit/:id" element={<Book />} />

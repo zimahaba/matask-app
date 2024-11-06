@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const Pagination = ({ pageResult, onChange }) => {
+const Pagination = ({ pageResult, onChange, elementName }) => {
     const [pageNumbers, setPageNumbers] = useState([])
     const { totalPages, currentPage, size, totalElements } = pageResult;
     const [firstItem, setFirstItem] = useState()
@@ -63,7 +63,7 @@ const Pagination = ({ pageResult, onChange }) => {
     return (
         <div className="d-flex justify-content-between align-items-center my-3">
             <div>
-                <span style={{color: '#183758'}}>Showing {firstItem} to {lastItem} of <b>{pageResult.totalElements}</b> books.</span>
+                <span style={{color: '#183758'}}>Showing {firstItem} to {lastItem} of <b>{pageResult.totalElements}</b> {elementName}.</span>
             </div>
 
             <div className="d-flex justify-content-center">

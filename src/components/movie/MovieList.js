@@ -3,7 +3,7 @@ import axios from 'axios';
 import './Movie.css';
 import { Link, useNavigate } from 'react-router-dom';
 import Pagination from '../common/Pagination';
-import { useDebouncedValue } from '../debounce';
+import { useDebouncedValue } from '../common/debounce';
 
 const MovieList = () => {
     const [movies, setMovies] = useState([]);
@@ -189,7 +189,7 @@ const MovieList = () => {
                     </tbody>
                 </table>
                 {pageResult.totalElements > 0 &&
-                    <Pagination pageResult={pageResult} onChange={handlePaginationChange}/>
+                    <Pagination pageResult={pageResult} onChange={handlePaginationChange} elementName="movies"/>
                 }
             </>
         )}

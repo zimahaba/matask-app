@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './Book.css';
+import './Project.css';
 import { Link, useNavigate } from 'react-router-dom';
 import Pagination from '../common/Pagination';
 import { useDebouncedValue } from '../common/debounce';
 
-const BookList = () => {
-    const [books, setBooks] = useState([]);
+const ProjectList = () => {
+    const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
     const [filters, setFilters] = useState({
         name: '',
-        author: '',
         progress1: '-1',
         progress2: '-1'
       });
@@ -25,14 +24,13 @@ const BookList = () => {
     const navigate = useNavigate()
     
     useEffect(() => {
-        findBooks(debouncedSearchTerm, pagination)
+        findProjects(debouncedSearchTerm, pagination)
     }, [debouncedSearchTerm, pagination])
 
-    const findBooks = (f, p) => {
+    const findProjects = (f, p) => {
         console.log('pagination:', p)
-        axios.get('/books', {params: {
+        axios.get('/projects', {params: {
             name: f.name, 
-            author: f.author, 
             progress1: f.progress1, 
             progress2: f.progress2,
             page: p.page,
@@ -42,12 +40,12 @@ const BookList = () => {
         }})
         .then(response => {
             console.log(response.data)
-            setBooks(response.data.books);
+            setProjects(response.data.projects);
             setPageResult({size: response.data.size, currentPage: response.data.page, totalPages: response.data.totalPages, totalElements: response.data.totalElements})
             setLoading(false);
         })
         .catch(error => {
-            console.error("There was an error fetching the books!", error);
+            console.error("There was an error fetching the projects!", error);
             setLoading(false);
         });
     }
@@ -71,23 +69,23 @@ const BookList = () => {
         }
     }
 
-    const handleUpdateBook = (id) => {
-        navigate("/books/edit/" + id)
+    const handleUpdateProject = (id) => {
+        navigate("/projects/edit/" + id)
     }
 
-    const handleDeleteBook = (id, name) => {
-        if(window.confirm('Are you sure you want to delete the book \'' + name + '\'?')) {
-            axios.delete('/books/' + id)
+    const handleDeleteProject = (id, name) => {
+        if(window.confirm('Are you sure you want to delete the project \'' + name + '\'?')) {
+            axios.delete('/projects/' + id)
             .then(response => {
-                console.log('Book deleted successfully.');
-                findBooks(debouncedSearchTerm, pagination);
+                console.log('Project deleted successfully.');
+                findProjects(debouncedSearchTerm, pagination);
             })
-            .catch(e => console.log('Error deleting book:', e))
+            .catch(e => console.log('Error deleting project:', e))
         }
     }
 
     const handleRowClick = (id) => {
-        navigate('/books/' + id);
+        navigate('/projects/' + id);
     };
 
     const handleSort = (field) => {
@@ -120,17 +118,13 @@ const BookList = () => {
 
     return (
       <div className="container mt-4">
-        <h2>Book List</h2>
+        <h2>Project List</h2>
 
         <div className="d-flex justify-content-between align-items-end mb-3">
             <div className="d-flex gap-3">
                 <div>
                     <label className="form-label">Name</label>
                     <input type="text" className="form-control" name="name" onChange={handleFilterChange}/>
-                </div>
-                <div>
-                    <label className="form-label">Author</label>
-                    <input type="text" className="form-control" name="author" onChange={handleFilterChange}/>
                 </div>
                 <div>
                     <label className="form-label">Progress</label>
@@ -144,7 +138,7 @@ const BookList = () => {
                     </select>
                 </div>
             </div>
-            <Link className="btn btn-1 mb-3" to="/books/add">New Book</Link>
+            <Link className="btn btn-1 mb-3" to="/projects/add">New Project</Link>
         </div>
 
         {loading ? (
@@ -157,9 +151,6 @@ const BookList = () => {
                             <th style={{ width: '40%', cursor: 'pointer' }} onClick={() => handleSort('name')}>
                                 Name {renderSortIcon('name')}
                             </th>
-                            <th style={{ width: '35%', cursor: 'pointer' }} onClick={() => handleSort('author')}>
-                                Author {renderSortIcon('author')}
-                            </th>
                             <th style={{ width: '10%', cursor: 'pointer' }} onClick={() => handleSort('progress')}>
                                 Progress {renderSortIcon('progress')}
                             </th>
@@ -167,24 +158,23 @@ const BookList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                    {books.length > 0 ? (
-                        books.map((book, index) => (
-                        <tr key={index} onClick={() => handleRowClick(book.id)} style={{ cursor: 'pointer' }}>
-                            <td>{book.name}</td>
-                            <td>{book.author}</td>
-                            <td>{book.progress}</td>
+                    {projects.length > 0 ? (
+                        projects.map((project, index) => (
+                        <tr key={index} onClick={() => handleRowClick(project.id)} style={{ cursor: 'pointer' }}>
+                            <td>{project.name}</td>
+                            <td>{project.progress}</td>
                             <td>
                                 <button className="btn btn-2 btn-sm me-2" 
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        handleUpdateBook(book.id);
+                                        handleUpdateProject(project.id);
                                     }}>
                                     Update
                                 </button>
                                 <button className="btn btn-danger btn-sm" 
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        handleDeleteBook(book.id, book.name);
+                                        handleDeleteProject(project.id, project.name);
                                     }}>
                                     Delete
                                 </button>
@@ -199,7 +189,7 @@ const BookList = () => {
                     </tbody>
                 </table>
                 {pageResult.totalElements > 0 &&
-                    <Pagination pageResult={pageResult} onChange={handlePaginationChange} elementName="books"/>
+                    <Pagination pageResult={pageResult} onChange={handlePaginationChange} elementName="projects"/>
                 }
             </>
         )}
@@ -207,4 +197,4 @@ const BookList = () => {
     );
 }
 
-export default BookList;
+export default ProjectList;
