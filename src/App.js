@@ -11,6 +11,7 @@ import { useAuth } from './components/AuthContext';
 import Signup from './components/Signup';
 import Book from './components/book/Book';
 import MovieList from './components/movie/MovieList';
+import MovieInfo from './components/movie/MovieInfo';
 
 function App() {
     const { isAuthenticated, logout } = useAuth();
@@ -45,6 +46,8 @@ function App() {
                             <Route path="/books/:id" element={<BookInfo />} />
                             <Route path="/movies" element={<MovieList />} />
                             <Route path="/movies/add" element={<Movie />} />
+                            <Route path="/movies/edit/:id" element={<Movie />} />
+                            <Route path="/movies/:id" element={<MovieInfo />} />
                         </Routes>
                     </div>
                 </div>

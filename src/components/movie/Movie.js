@@ -91,7 +91,6 @@ function Movie() {
             })
             axios.get('/movies/' + id)
             .then((response) => {
-                console.log(response.data)
                 setFormData({
                     name: response.data.name,
                     director: response.data.director,
@@ -104,7 +103,8 @@ function Movie() {
                     rate: response.data.rate,
                     actors: response.data.actors,
                     poster: null
-                })
+                });
+                setWatched(response.data.started !== '')
             })
             .catch(e => {console.error('Movie with id ' + id + 'not found.')})
         }
