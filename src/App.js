@@ -13,6 +13,7 @@ import Book from './components/book/Book';
 import MovieList from './components/movie/MovieList';
 import MovieInfo from './components/movie/MovieInfo';
 import ProjectList from './components/project/ProjectList';
+import ProjectInfo from './components/project/ProjectInfo';
 
 function App() {
     const { isAuthenticated, logout } = useAuth();
@@ -43,7 +44,7 @@ function App() {
                             <Route path="/projects" element={<ProjectList />} />
                             <Route path="/projects/add" element={<Project />} />
                             <Route path="/projects/edit/:id" element={<Project />} />
-                            <Route path="/projects/:id" element={<Project />} />
+                            <Route path="/projects/:id" element={<ProjectInfo />} />
                             <Route path="/books" element={<BookList />} />
                             <Route path="/books/add" element={<Book />} />
                             <Route path="/books/edit/:id" element={<Book />} />
