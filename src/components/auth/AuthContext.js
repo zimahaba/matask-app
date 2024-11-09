@@ -37,8 +37,8 @@ export function AuthProvider({ children }) {
         }
     }
 
-    const login = (username, password) => {
-        axios.post('/auth/login', {username: username, password: password}) 
+    const login = (username, password, keepLoggedIn) => {
+        axios.post('/auth/login', {username: username, password: password, keepLoggedIn: keepLoggedIn}) 
         .then(response => {
             setUser({username: username});
             setIsAuthenticated(true);
