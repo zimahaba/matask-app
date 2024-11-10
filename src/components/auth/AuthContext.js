@@ -4,13 +4,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
+const noAuthPaths = ['/signup', '/error', '/recovery']
+
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
     const location = useLocation()
 
     useEffect(() => {
-        if (location.pathname !== '/signup') {
+        if (!noAuthPaths.includes(location.pathname)) {
             if (!isAuthenticated()) {
                 navigate('/login')
             }

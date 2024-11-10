@@ -14,6 +14,8 @@ import MovieList from './components/movie/MovieList';
 import MovieInfo from './components/movie/MovieInfo';
 import ProjectList from './components/project/ProjectList';
 import ProjectInfo from './components/project/ProjectInfo';
+import PassRecovery from './components/user/PassRecovery';
+import Error from './components/error/Error';
 
 const globalRouter = { navigate: null };
 const globalAuth = {setAuthenticated: null}
@@ -69,6 +71,8 @@ function App() {
                 <Routes>
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<Signup />} />
+                    <Route path="/recovery" element={<PassRecovery />} />
+                    <Route path="/error" element={<Error />} />
                 </Routes>
             }
         </>

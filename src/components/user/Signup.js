@@ -9,7 +9,7 @@ const Signup = () => {
     const emailRef = useRef();
     const passwordRef = useRef();
     const confirmPasswordRef = useRef();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const signupHandler = (e) => {
         e.preventDefault();

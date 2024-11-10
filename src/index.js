@@ -13,7 +13,7 @@ axios.defaults.headers.post['Content-Type'] = 'application/json';
 const noRefreshPaths = ['/auth/login', '/auth/refresh', '/auth/logout']
 
 const shouldRefresh = (error) => {
-    return noRefreshPaths.includes(error.config.url) == false
+    return noRefreshPaths.includes(error.config.url) === false
         && error.response && error.status === 401;
 }
 
