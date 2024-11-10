@@ -42,7 +42,7 @@ const Login = () => {
                         <button type="submit" className="btn btn-1 w-100">Login</button>
                     </form>
                     <div className="text-center mt-3">
-                        <p>Don't have an account? <a href="/register" className="text-decoration-none">Register</a></p>
+                        <p>Don't have an account? <a href="/signup" className="text-decoration-none">Register</a></p>
                     </div>
                 </div>
             </div>

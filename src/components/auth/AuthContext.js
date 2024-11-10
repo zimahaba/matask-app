@@ -6,35 +6,24 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const navigate = useNavigate();
     const location = useLocation()
 
     useEffect(() => {
         if (location.pathname !== '/signup') {
-            checkAuth()
-            .then(authenticated => {
-                if (location.pathname === '/login' && authenticated) {
-                    navigate('/')
-                } else if (!authenticated) {
-                    navigate('/login')
-                }
-            });
+            if (!isAuthenticated()) {
+                navigate('/login')
+            }
         }
     }, [])
 
-    const checkAuth = async () => {
-        try {
-            const response = await axios.get('/auth/userinfo');
-            if (response.status === 200) {
-                setUser({username: response.data.username});
-                setIsAuthenticated(true);
-                return true;
-            }
-            return false
-        } catch(e) {
-            return false;
-        }
+    const setIsAuthenticated = (value) => {
+        localStorage.setItem('auth', value)
+    }
+
+    const isAuthenticated = () => {
+        const a = localStorage.getItem('auth');
+        return a !== undefined && a !== null && (a === true || a === 'true');
     }
 
     const login = (username, password, keepLoggedIn) => {
@@ -65,6 +54,7 @@ export function AuthProvider({ children }) {
     const authValue = {
         user,
         isAuthenticated,
+        setIsAuthenticated,
         login,
         logout,
     };

@@ -1,6 +1,6 @@
 import './App.css';
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link, useNavigate } from 'react-router-dom';
 import Home from './components/Home';
 import Project from './components/project/Project';
 import BookList from './components/book/BookList';
@@ -15,8 +15,16 @@ import MovieInfo from './components/movie/MovieInfo';
 import ProjectList from './components/project/ProjectList';
 import ProjectInfo from './components/project/ProjectInfo';
 
+const globalRouter = { navigate: null };
+const globalAuth = {setAuthenticated: null}
+
+export {globalRouter, globalAuth}
+
 function App() {
-    const { isAuthenticated, logout } = useAuth();
+    const { isAuthenticated, setIsAuthenticated, logout } = useAuth();
+    const navigate = useNavigate()
+    globalAuth.setAuthenticated = setIsAuthenticated;
+    globalRouter.navigate = navigate;
     
     const logoutHandler = () => {
         logout()
@@ -24,7 +32,7 @@ function App() {
 
     return (
         <>
-            {isAuthenticated &&
+            {isAuthenticated() &&
                 <div>
                     <nav className="navbar navbar-expand-lg">
                         <div className="container-fluid">
@@ -57,7 +65,7 @@ function App() {
                     </div>
                 </div>
             }
-            {!isAuthenticated &&
+            {!isAuthenticated() &&
                 <Routes>
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<Signup />} />

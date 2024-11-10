@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
+import App, { globalAuth, globalRouter } from './App';
 import axios from "axios"
 import { AuthProvider } from './components/auth/AuthContext';
-import { BrowserRouter, Router } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 
 axios.defaults.baseURL=process.env.REACT_APP_API_URL
 axios.defaults.withCredentials=true
@@ -18,17 +18,17 @@ const shouldRefresh = (error) => {
 }
 
 axios.interceptors.response.use((response) => {
-    console.log('resp')
     return response;
 }, async (error) => {
     if (shouldRefresh(error)) {
         const originalConfig = error.config;
-        console.log('opaaaa')
         try {
             await axios.post('/auth/refresh')
             return axios(originalConfig)
         } catch(e) {
-            console.log('Refresh token revoked.')
+            console.log('Refresh token revoked or user didnt opt to keep logged in.')
+            globalAuth.setAuthenticated(false)
+            globalRouter.navigate('/login')
         }
     }    
     return Promise.reject(error.message);
@@ -39,7 +39,7 @@ root.render(
     <div id="main">
         <BrowserRouter>
             <AuthProvider>
-                <App/>
+                    <App/>
             </AuthProvider>
         </BrowserRouter>
     </div>
