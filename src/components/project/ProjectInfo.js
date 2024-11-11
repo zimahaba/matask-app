@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import cover from '../../assets/lotr.jpg';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Rate from '../common/Rate';
 import Progress from '../common/Progress';
@@ -8,6 +8,8 @@ import Progress from '../common/Progress';
 const ProjectInfo = () => {
     const [project, setProject] = useState(null)
     const {id} = useParams()
+    const location = useLocation();
+    const back = new URLSearchParams(location.search).get('back');
 
     useEffect(() => {
         axios.get('/projects/' + id)
@@ -62,7 +64,7 @@ const ProjectInfo = () => {
                             </div>
 
                             <div className="text-center mt-4">
-                                <Link className="btn btn-secondary px-5" to="/projects">Back</Link>
+                                <Link className="btn btn-secondary px-5" to={back === 'home' ? '/' : '/projects'}>Back</Link>
                             </div>
                         </div>
                     </div>

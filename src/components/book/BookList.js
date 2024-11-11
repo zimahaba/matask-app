@@ -29,7 +29,6 @@ const BookList = () => {
     }, [debouncedSearchTerm, pagination])
 
     const findBooks = (f, p) => {
-        console.log('pagination:', p)
         axios.get('/books', {params: {
             name: f.name, 
             author: f.author, 
@@ -41,7 +40,6 @@ const BookList = () => {
             sortDirection: p.sortDirection
         }})
         .then(response => {
-            console.log(response.data)
             setBooks(response.data.books);
             setPageResult({size: response.data.size, currentPage: response.data.page, totalPages: response.data.totalPages, totalElements: response.data.totalElements})
             setLoading(false);

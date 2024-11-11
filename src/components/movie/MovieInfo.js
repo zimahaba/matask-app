@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import cover from '../../assets/lotr.jpg';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Rate from '../common/Rate';
 import Progress from '../common/Progress';
@@ -10,6 +10,8 @@ const MovieInfo = () => {
     const [poster, setPoster] = useState(null);
     const [watched, setWatched] = useState(false);
     const {id} = useParams()
+    const location = useLocation();
+    const back = new URLSearchParams(location.search).get('back');
 
     useEffect(() => {
         axios.get('/movies/poster/' + id, {responseType: 'blob'})
@@ -101,7 +103,7 @@ const MovieInfo = () => {
                             <p>{movie.comments}</p>
 
                             <div className="text-center mt-4">
-                                <Link className="btn btn-secondary px-5" to="/books">Back</Link>
+                                <Link className="btn btn-secondary px-5" to={back === 'home' ? '/' : '/movies'}>Back</Link>
                             </div>
                         </div>
                     </div>

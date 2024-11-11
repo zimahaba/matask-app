@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import cover from '../../assets/lotr.jpg';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Rate from '../common/Rate';
 import Progress from '../common/Progress';
@@ -9,6 +9,8 @@ const BookInfo = () => {
     const [book, setBook] = useState(null)
     const [cover, setCover] = useState(null);
     const {id} = useParams()
+    const location = useLocation();
+    const back = new URLSearchParams(location.search).get('back');
 
     useEffect(() => {
         axios.get('/books/cover/' + id, {responseType: 'blob'})
@@ -106,7 +108,7 @@ const BookInfo = () => {
                             <p>{book.comments}</p>
 
                             <div className="text-center mt-4">
-                                <Link className="btn btn-secondary px-5" to="/books">Back</Link>
+                                <Link className="btn btn-secondary px-5" to={back === 'home' ? '/' : '/books'}>Back</Link>
                             </div>
                         </div>
                     </div>

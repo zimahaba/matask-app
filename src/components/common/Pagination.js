@@ -86,9 +86,9 @@ const Pagination = ({ pageResult, onChange, elementName }) => {
             <div className="d-flex align-items-center">
                 <span className="me-2" style={{ whiteSpace: 'nowrap', color: '#183758' }}>Rows per page:</span>
                 <select className="form-select select-1" onChange={handleSizeChange}>
-                    <option value={10}>10</option>
-                    <option value={20}>20</option>
-                    <option value={50}>50</option>
+                    <option value={10} selected={size === 10}>10</option>
+                    <option value={20} selected={size === 20}>20</option>
+                    <option value={50} selected={size === 50}>50</option>
                 </select>
             </div>
 
