@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import './Book.css';
 import { Link, useNavigate } from 'react-router-dom';
 import Pagination from '../common/Pagination';
 import { useDebouncedValue } from '../common/debounce';
+import { mataskAxios } from '../..';
 
 const BookList = () => {
     const [books, setBooks] = useState([]);
@@ -29,7 +29,7 @@ const BookList = () => {
     }, [debouncedSearchTerm, pagination])
 
     const findBooks = (f, p) => {
-        axios.get('/books', {params: {
+        mataskAxios.get('/books', {params: {
             name: f.name, 
             author: f.author, 
             progress1: f.progress1, 
@@ -75,7 +75,7 @@ const BookList = () => {
 
     const handleDeleteBook = (id, name) => {
         if(window.confirm('Are you sure you want to delete the book \'' + name + '\'?')) {
-            axios.delete('/books/' + id)
+            mataskAxios.delete('/books/' + id)
             .then(response => {
                 console.log('Book deleted successfully.');
                 findBooks(debouncedSearchTerm, pagination);

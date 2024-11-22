@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Rate from '../common/Rate';
 import Progress from '../common/Progress';
+import { mataskAxios } from '../..';
 
 function Book() {
     const [formData, setFormData] = useState({
@@ -45,7 +45,7 @@ function Book() {
         const method = id === undefined ? 'post' : 'put';
         const url = id === undefined ? '/books' : '/books/' + id;
 
-        axios({
+        mataskAxios({
             method: method,
             url: url,
             data: formDataToSend,
@@ -70,7 +70,7 @@ function Book() {
 
     useEffect(() => {
         if (id !== undefined) {
-            axios.get('/books/cover/' + id, {responseType: 'blob'})
+            mataskAxios.get('/books/cover/' + id, {responseType: 'blob'})
             .then(async response => {
                 setCover(URL.createObjectURL(response.data));
                 
@@ -79,7 +79,7 @@ function Book() {
                 setCover("");
                 console.log('Error getting book cover:', e)
             })
-            axios.get('/books/' + id)
+            mataskAxios.get('/books/' + id)
             .then((response) => {
                 console.log(response.data)
                 setFormData({

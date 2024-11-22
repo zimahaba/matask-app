@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDebouncedValue } from './common/debounce';
 import Pagination from './common/Pagination';
 import { capitalize } from './common/utils';
+import { mataskAxios } from '..';
 
 const Home = () => {
     const [tasks, setTasks] = useState([]);
@@ -26,7 +26,7 @@ const Home = () => {
     }, [debouncedSearchTerm, pagination])
 
     const findTasks = (f, p) => {
-        axios.get('/tasks', {params: {
+        mataskAxios.get('/tasks', {params: {
             name: f.name, 
             page: p.page,
             size: p.size,

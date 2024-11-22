@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import './Movie.css';
 import { Link, useNavigate } from 'react-router-dom';
 import Pagination from '../common/Pagination';
 import { useDebouncedValue } from '../common/debounce';
+import { mataskAxios } from '../..';
 
 const MovieList = () => {
     const [movies, setMovies] = useState([]);
@@ -29,7 +29,7 @@ const MovieList = () => {
 
     const findMovies = (f, p) => {
         console.log('pagination:', p)
-        axios.get('/movies', {params: {
+        mataskAxios.get('/movies', {params: {
             name: f.name, 
             director: f.director, 
             year: f.year,
@@ -39,7 +39,6 @@ const MovieList = () => {
             sortDirection: p.sortDirection
         }})
         .then(response => {
-            console.log(response.data)
             setMovies(response.data.movies);
             setPageResult({size: response.data.size, currentPage: response.data.page, totalPages: response.data.totalPages, totalElements: response.data.totalElements})
             setLoading(false);
@@ -70,7 +69,7 @@ const MovieList = () => {
 
     const handleDeleteMovie = (id, name) => {
         if(window.confirm('Are you sure you want to delete the movie \'' + name + '\'?')) {
-            axios.delete('/movies/' + id)
+            mataskAxios.delete('/movies/' + id)
             .then(response => {
                 console.log('Movie deleted successfully.');
                 findMovies(debouncedSearchTerm, pagination);

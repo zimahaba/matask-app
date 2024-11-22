@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import './Project.css';
 import { Link, useNavigate } from 'react-router-dom';
 import Pagination from '../common/Pagination';
 import { useDebouncedValue } from '../common/debounce';
+import { mataskAxios } from '../..';
 
 const ProjectList = () => {
     const [projects, setProjects] = useState([]);
@@ -29,7 +29,7 @@ const ProjectList = () => {
 
     const findProjects = (f, p) => {
         console.log('pagination:', p)
-        axios.get('/projects', {params: {
+        mataskAxios.get('/projects', {params: {
             name: f.name, 
             progress1: f.progress1, 
             progress2: f.progress2,
@@ -39,7 +39,6 @@ const ProjectList = () => {
             sortDirection: p.sortDirection
         }})
         .then(response => {
-            console.log(response.data)
             setProjects(response.data.projects);
             setPageResult({size: response.data.size, currentPage: response.data.page, totalPages: response.data.totalPages, totalElements: response.data.totalElements})
             setLoading(false);
@@ -75,7 +74,7 @@ const ProjectList = () => {
 
     const handleDeleteProject = (id, name) => {
         if(window.confirm('Are you sure you want to delete the project \'' + name + '\'?')) {
-            axios.delete('/projects/' + id)
+            mataskAxios.delete('/projects/' + id)
             .then(response => {
                 console.log('Project deleted successfully.');
                 findProjects(debouncedSearchTerm, pagination);

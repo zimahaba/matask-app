@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import cover from '../../assets/lotr.jpg';
 import { Link, useLocation, useParams } from 'react-router-dom';
-import axios from 'axios';
 import Rate from '../common/Rate';
-import Progress from '../common/Progress';
+import { mataskAxios } from '../..';
 
 const MovieInfo = () => {
     const [movie, setMovie] = useState(null)
@@ -14,7 +13,7 @@ const MovieInfo = () => {
     const back = new URLSearchParams(location.search).get('back');
 
     useEffect(() => {
-        axios.get('/movies/poster/' + id, {responseType: 'blob'})
+        mataskAxios.get('/movies/poster/' + id, {responseType: 'blob'})
         .then(async response => {
             console.log('got picture')
             setPoster(URL.createObjectURL(response.data));
@@ -24,7 +23,7 @@ const MovieInfo = () => {
             setPoster("");
             console.log('Error getting movie poster:', e)
         })
-        axios.get('/movies/' + id)
+        mataskAxios.get('/movies/' + id)
         .then(response => {
             console.log(response.data)
             setMovie(response.data)

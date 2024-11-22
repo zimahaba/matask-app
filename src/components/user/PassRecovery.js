@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { biuAxios } from "../..";
 
 const PassRecovery = () => {
     const location = useLocation()
@@ -18,7 +18,7 @@ const PassRecovery = () => {
             return;
         }
         
-        axios.post('/users/pass', {password: password})
+        biuAxios.post('/users/pass', {password: password})
         .then(response => {
             navigate('/login')
         })
@@ -35,7 +35,7 @@ const PassRecovery = () => {
             navigate('/error')
         }
 
-        axios.get('/auth/recover', {params: {
+        biuAxios.get('/auth/recover', {params: {
             tk: token
         }})
         .then(response => {

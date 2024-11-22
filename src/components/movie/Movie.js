@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Rate from '../common/Rate';
+import { mataskAxios } from '../..';
 
 function Movie() {
     const [formData, setFormData] = useState({
@@ -59,7 +59,7 @@ function Movie() {
 
         formDataToSend.forEach((v, k) => console.log(k, ':', v))
 
-        axios({
+        mataskAxios({
             method: method,
             url: url,
             data: formDataToSend,
@@ -80,7 +80,7 @@ function Movie() {
 
     useEffect(() => {
         if (id !== undefined) {
-            axios.get('/movies/poster/' + id, {responseType: 'blob'})
+            mataskAxios.get('/movies/poster/' + id, {responseType: 'blob'})
             .then(async response => {
                 setPoster(URL.createObjectURL(response.data));
                 
@@ -89,7 +89,7 @@ function Movie() {
                 setPoster("");
                 console.log('Error getting movie poster:', e)
             })
-            axios.get('/movies/' + id)
+            mataskAxios.get('/movies/' + id)
             .then((response) => {
                 setFormData({
                     name: response.data.name,

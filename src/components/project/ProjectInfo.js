@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import cover from '../../assets/lotr.jpg';
 import { Link, useLocation, useParams } from 'react-router-dom';
-import axios from 'axios';
-import Rate from '../common/Rate';
 import Progress from '../common/Progress';
+import { mataskAxios } from '../..';
 
 const ProjectInfo = () => {
     const [project, setProject] = useState(null)
@@ -12,7 +11,7 @@ const ProjectInfo = () => {
     const back = new URLSearchParams(location.search).get('back');
 
     useEffect(() => {
-        axios.get('/projects/' + id)
+        mataskAxios.get('/projects/' + id)
         .then(response => {
             console.log(response.data)
             setProject(response.data)

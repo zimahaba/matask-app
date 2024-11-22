@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import Rate from '../common/Rate';
 import Progress from '../common/Progress';
+import { mataskAxios } from '../..';
 
 function Project() {
     const [formData, setFormData] = useState({
@@ -26,7 +25,7 @@ function Project() {
         const method = id === undefined ? 'post' : 'put';
         const url = id === undefined ? '/projects' : '/projects/' + id;
 
-        axios({
+        mataskAxios({
             method: method,
             url: url,
             data: formData,
@@ -47,7 +46,7 @@ function Project() {
 
     useEffect(() => {
         if (id !== undefined) {
-            axios.get('/projects/' + id)
+            mataskAxios.get('/projects/' + id)
             .then((response) => {
                 console.log(response.data)
                 setFormData({

@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import './Signup.css';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { biuAxios } from '../..';
 
 const Signup = () => {
     const firstNameRef = useRef();
@@ -21,7 +21,7 @@ const Signup = () => {
             return;
         }
         
-        axios.post('/signup', {name: name, email: emailRef.current.value, password: password})
+        biuAxios.post('/users', {name: name, email: emailRef.current.value, password: password})
         .then(response => {
             navigate('/login')
         })

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import axios from 'axios';
 import { useLocation, useNavigate } from "react-router-dom";
+import { biuAxios } from '../..';
 
 const AuthContext = createContext();
 
@@ -29,7 +29,7 @@ export function AuthProvider({ children }) {
     }
 
     const login = (username, password, keepLoggedIn) => {
-        axios.post('/auth/login', {username: username, password: password, keepLoggedIn: keepLoggedIn}) 
+        biuAxios.post('/auth/login', {username: username, password: password, keepLoggedIn: keepLoggedIn}) 
         .then(response => {
             setUser({username: username});
             setIsAuthenticated(true);
@@ -41,7 +41,7 @@ export function AuthProvider({ children }) {
     };
 
     const logout = () => {
-        axios.post('/auth/logout')
+        biuAxios.post('/auth/logout')
         .then(response => {
             setUser(null);
             setIsAuthenticated(false);

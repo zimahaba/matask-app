@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import cover from '../../assets/lotr.jpg';
 import { Link, useLocation, useParams } from 'react-router-dom';
-import axios from 'axios';
 import Rate from '../common/Rate';
 import Progress from '../common/Progress';
+import { mataskAxios } from '../..';
 
 const BookInfo = () => {
     const [book, setBook] = useState(null)
@@ -13,7 +12,7 @@ const BookInfo = () => {
     const back = new URLSearchParams(location.search).get('back');
 
     useEffect(() => {
-        axios.get('/books/cover/' + id, {responseType: 'blob'})
+        mataskAxios.get('/books/cover/' + id, {responseType: 'blob'})
         .then(async response => {
             console.log('got picture')
             setCover(URL.createObjectURL(response.data));
@@ -23,7 +22,7 @@ const BookInfo = () => {
             setCover("");
             console.log('Error getting book cover:', e)
         })
-        axios.get('/books/' + id)
+        mataskAxios.get('/books/' + id)
         .then(response => {
             console.log(response.data)
             setBook(response.data)
